@@ -1,5 +1,7 @@
 # Measuring Success
 
+## Introduction
+
 Over the past twenty years, I've had the privilege of working with many great
 developers. A good developer can write testable and maintainable code that
 allows the team to provide new features to customers. I believe a good developer
@@ -15,6 +17,8 @@ improvement in quality. I decided to look for some ways of measuring parts of
 our system to see if it could help us improve the way we build and maintain our
 Web applications here at Mpowered.
 
+## Tools of the trade
+
 We picked [Grafana](https://grafana.com) as our graphing tool, which has native
 support for PostgreSQL (using the [TimescaleDB](https://www.timescale.com)
 extension). While it works with many other
@@ -23,6 +27,8 @@ using a well supported relational database makes it easy to import data from any
 platform that can connect to a Postgres database. Running ad-hoc SQL queries can
 be used to discover new patterns in our data that are then trivial to add as a
 graph in one of our dashboards.
+
+## Low-hanging fruit
 
 Our first phase involved measuring the easy stuff, namely system performance and
 resource usage on the servers our applications run on. Seeing CPU, RAM, and disk
@@ -34,6 +40,8 @@ this data to dynamically scale our infrastructure during busy times by looking
 at long term trends as well as live performance data.
 
 ![CPU utilisation graph](img/cpu.png)
+
+## Details matter
 
 The second set of metrics we added were at the application level, tracking the
 number of active web connections, the type and duration of web requests, and
@@ -66,13 +74,15 @@ queues and how long they take to run. Tracking these durations helps inform us
 where adding more workers in parallel is beneficial, or if we should investigate
 making particular sections of code more performant.
 
+## Measure all the things!
+
 TimescaleDB also allows me to capture as much information as I think might be
-relevant later, and worry about how to present it later when discovering which
-tables and graphs are ultimately useful. Leveraging existing SQL tooling makes
-it easy to transform data later on. For example, we also captured each job's
-identifier, the queue it was added to and which worker ran it. These additional
-fields allowed us to identify the slowest performing job of each type and
-investigate the worst offenders.
+relevant later, and worry about how to present it when discovering which tables
+and graphs are ultimately useful. Leveraging existing SQL tooling makes it easy
+to transform data later on. For example, we also captured each job's identifier,
+the queue it was added to and which worker ran it. These additional fields
+allowed us to identify the slowest performing job of each type and investigate
+the worst offenders.
 
 ![Slow jobs by type](img/jobs.png)
 
@@ -84,6 +94,8 @@ place, Grafana allows us to place alerts to track these values going forward and
 alert us if it's something we need to revisit in the future. As such, we
 continue to add application metrics as our applications grow and mature.
 
+## Looking ahead
+
 The final set of metrics we're adding right now are project-related ones. We
 track the number of bugs reported by [Honeybadger](https://app.honeybadger.io/)
 to get a feel for long term trends and hope to use this information to guide our
@@ -92,6 +104,8 @@ increase in certain types of bugs on our staging environment after a big
 feature-focussed push. By examining which class of errors we missed, we can
 guide our code reviews and decide how better to catch them earlier during
 automated testing.
+
+## Conclusion
 
 Measuring your system is a great way to locate which areas of your code require
 the most attention. Additionally, it is incredibly rewarding seeing improvements
