@@ -60,8 +60,8 @@ issues first.
 Something I did not initially anticipate when picking TimescaleDB is that I can
 create partial measurements and then update them from different places
 throughout a distributed system. Our job system, for example, creates a job
-entry when first adding it to our a queue, and our workers later update it the
-start and completion times.
+entry when first adding it to a queue, and our workers later update it the start
+and completion times.
 
 | job_id | enqueued_at         | started_at          | completed_at        |
 | ------ | ------------------- | ------------------- | ------------------- |
