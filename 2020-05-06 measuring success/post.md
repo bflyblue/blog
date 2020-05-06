@@ -2,27 +2,26 @@
 
 Over the past twenty years, I've had the privilege of working with many great
 developers. A good developer can write testable and maintainable code that
-allows the team to provide new features to customers. While adding new
-functionality to an application is necessary, it is also essential that the
-system remains secure, performant, stable, and highly available to its users.
-These qualities are not trivial to ensure, and even experienced developers can
-accidentally slip up. Conversely, it is possible to over-engineer solutions that
-slow the pace of new features for no measurable improvement in quality.
+allows the team to provide new features to customers. I believe a good developer
+should also be a good engineer and one simple way we can begin to do is by
+*measuring* the things we do!
 
-Before we could make any meaningful improvement to our systems and development
-processes, we decided we first needed to measure how we were currently doing.
-Once we had a baseline to work from, we could then track how changes we make to
-the system affect these various measures of performance and quality over time.
-Of course, choosing meaningful metrics is key to using relevant information to
-tune your application, and is something we're continually working to improve.
+While adding new functionality to an application is essential, it is also
+critical that the system remains secure, performant, stable, and highly
+available for its users. These qualities are not trivial to ensure, and even
+experienced developers can accidentally slip up. Conversely, it is possible to
+over-engineer solutions that slow the pace of new features for no measurable
+improvement in quality. I decided to look for some ways of measuring parts of
+our system to see if it could help us improve the way we build and maintain our
+Web applications here at Mpowered.
 
-We picked [Grafana](https://grafana.com) as our graphing tool and PostgreSQL
-(using the [Timescale](https://www.timescale.com) extension) as the database for
-our metrics. While this involved a little more work initially, using a
-relational database made it trivial to import data from any platform that can
-connect to a Postgres database. Being able to run ad-hoc SQL queries was useful
-in discovering new patterns in our data that are then trivial to graph in
-Grafana.
+We picked [Grafana](https://grafana.com) as our graphing tool which has native
+support for PostgreSQL (using the [Timescale](https://www.timescale.com)
+extension) as the database for our metrics. While it works with many other
+[time series databases](https://en.wikipedia.org/wiki/Time_series_database),
+using a relational database made it trivial to import data from any platform
+that can connect to a Postgres database. Running ad-hoc SQL queries is useful in
+discovering new patterns in our data that are then trivial to graph in Grafana.
 
 Our first phase involved measuring the easy stuff, namely system performance and
 resource usage on the servers our applications run on. Seeing CPU, RAM, and disk
@@ -51,8 +50,8 @@ work so that our team can focus on tackling the most pressing issues first.
 Something I had not anticipated when comparing time-series databases to
 Timescale was that the latter makes it possible to group metrics and update them
 from different places in a distributed system with easy. Our job system, for
-example, creates a measurement entry when first adding a job the queue, and our
-workers later update the start and completion times.
+example, creates a measurement entry when first adding a job to the queue, and
+our workers later update the start and completion times.
 
 | job_id | enqueued_at         | started_at          | completed_at        |
 | ------ | ------------------- | ------------------- | ------------------- |
@@ -87,7 +86,7 @@ having tangible feedback is incredibly rewarding when completing a task and
 seeing its positive impact on your system in production. Graphs and alerts can
 be placed on a dashboard and displayed in the office to give a real-time view of
 the environment that everyone can see. It was very encouraging to find
-non-technical people take an interest in this data, in it's to easy to digest
+non-technical people take an interest in this data, in an easily digestible
 format, which in turn stimulated other conversations about the inner workings of
 our application.
 
