@@ -1,7 +1,5 @@
 # Measuring Success
 
-## Introduction
-
 Over the past twenty years, I've had the privilege of working with many great
 developers. A good developer can write testable and maintainable code that
 allows the team to provide new features to customers. I believe a good developer
