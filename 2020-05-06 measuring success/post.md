@@ -15,7 +15,7 @@ improvement in quality. I decided to look for some ways of measuring parts of
 our system to see if it could help us improve the way we build and maintain our
 Web applications here at Mpowered.
 
-We picked [Grafana](https://grafana.com) as our graphing tool which has native
+We picked [Grafana](https://grafana.com) as our graphing tool, which has native
 support for PostgreSQL (using the [TimescaleDB](https://www.timescale.com)
 extension). While it works with many other
 [time series databases](https://en.wikipedia.org/wiki/Time_series_database),
@@ -38,14 +38,14 @@ at long term trends as well as live performance data.
 The second set of metrics we added were at the application level, tracking the
 number of active web connections, the type and duration of web requests, and
 similar information about our background jobs. We identified several web pages
-and offline tasks that were taking longer than we wanted. Code that had been
-adequate in the past now needed to be improved, due to the increasing size and
-complexity of data our customers work with today. A detailed list of users and
-accounts with slow queries guided us when generating sample data for testing.
-Measurements before and after we adjusted our code helped confirm the changes
-were performing as expected. Profiling a running application this way has been
-invaluable in prioritising work so that our team can focus on tackling the most
-pressing issues first.
+and offline tasks that were taking longer than we wanted. Code once adequate now
+needed to be improved, due to the increasing size and complexity the data our
+customers work with today. A detailed list of users and accounts with slow
+queries guided us when generating sample data for testing. Measurements before
+and after we adjusted our code helped confirm the changes were performing as
+expected. Profiling a running application this way has been invaluable in
+prioritising work so that our team can focus on tackling the most pressing
+issues first.
 
 ![Web request times by type](img/view.png)
 
