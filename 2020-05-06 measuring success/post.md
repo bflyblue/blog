@@ -16,13 +16,13 @@ our system to see if it could help us improve the way we build and maintain our
 Web applications here at Mpowered.
 
 We picked [Grafana](https://grafana.com) as our graphing tool which has native
-support for PostgreSQL (using the [Timescale](https://www.timescale.com)
+support for PostgreSQL (using the [TimescaleDB](https://www.timescale.com)
 extension). While it works with many other
 [time series databases](https://en.wikipedia.org/wiki/Time_series_database),
 using a well supported relational database makes it easy to import data from any
-platform that can connect to a Postgres database. Running ad-hoc SQL queries is
-useful in discovering new patterns in our data that are then trivial to graph in
-Grafana.
+platform that can connect to a Postgres database. Running ad-hoc SQL queries can
+be used to discover new patterns in our data that are then trivial to add as a
+graph in one of our dashboards.
 
 Our first phase involved measuring the easy stuff, namely system performance and
 resource usage on the servers our applications run on. Seeing CPU, RAM, and disk
@@ -30,42 +30,53 @@ utilisation across multiple servers on a single graph highlighted interactions
 between systems, and also helps us know when and how to upgrade our
 infrastructure. Comparing average and peak usage helped us size key services
 like our database and job queue workers. Looking ahead, we also hope to leverage
-this data to dynamically scale up our infrastructure during busy times by
-looking at long term trends as well as live performance data.
+this data to dynamically scale our infrastructure during busy times by looking
+at long term trends as well as live performance data.
 
 ![CPU utilisation graph](img/cpu.png)
 
 The second set of metrics we added were at the application level, tracking the
 number of active web connections, the type and duration of web requests, and
-similar information about our background jobs. We identified several places
-where performance had once been adequate in the past, but, due to the increasing
-size and complexity of data our customers work with today began to take longer
-than we wanted. A detailed list of users and accounts with slow queries guided
-us when generating sample data for testing. Measurements before and after we
-improved our code helped confirmed the changes were performing as expected.
-Profiling a running application this way has been invaluable in prioritising
-work so that our team can focus on tackling the most pressing issues first.
+similar information about our background jobs. We identified several web pages
+and offline tasks that were taking longer than we wanted. Code that had been
+adequate in the past now needed to be improved, due to the increasing size and
+complexity of data our customers work with today. A detailed list of users and
+accounts with slow queries guided us when generating sample data for testing.
+Measurements before and after we adjusted our code helped confirm the changes
+were performing as expected. Profiling a running application this way has been
+invaluable in prioritising work so that our team can focus on tackling the most
+pressing issues first.
 
 ![Web request times by type](img/view.png)
 
-Something I had not anticipated when comparing time-series databases to
-Timescale was that the latter makes it possible to group metrics and update them
-from different places in a distributed system with easy. Our job system, for
-example, creates a measurement entry when first adding a job to the queue, and
-our workers later update the start and completion times.
+Something I did not initially anticipate when picking TimescaleDB is that I can
+create partial measurements and then update them from different places
+throughout a distributed system. Our job system, for example, creates a job
+entry when first adding it to our a queue, and our workers later update it the
+start and completion times.
 
 | job_id | enqueued_at         | started_at          | completed_at        |
 | ------ | ------------------- | ------------------- | ------------------- |
 | 5eaefc | 2020-05-06 13:10:52 | 2020-05-06 13:11:14 | 2020-05-06 13:12:15 |
 
-This information allows us to track how long jobs sit in the various queues and
-how long they take to complete. Tracking these durations helps inform us where
-adding more workers in parallel is beneficial, or if we should investigate
+We can tell a job is waiting in a queue when it has been enqueued but does not
+yet have a start time, and similarly, we can tell when it is running or has
+completed. This information allows us to track how long jobs sit in the various
+queues and how long they take to run. Tracking these durations helps inform us
+where adding more workers in parallel is beneficial, or if we should investigate
 making particular sections of code more performant.
+
+TimescaleDB also allows me to capture as much information as I think might be
+relevant later, and worry about how to present it later when discovering which
+tables and graphs are ultimately useful. Leveraging existing SQL tooling makes
+it easy to transform data later on. For example, we also captured each job's
+identifier, the queue it was added to and which worker ran it. These additional
+fields allowed us to identify the slowest performing job of each type and
+investigate the worst offenders.
 
 ![Slow jobs by type](img/jobs.png)
 
-Developers are also encouraged to add metrics, where possible, before
+Where possible, developers are also encouraged to add metrics before
 investigating bugs and performance-related issues. It's useful to demonstrate
 where the current code is not running as intended and decide on a reasonable
 target for which we consider a fix as "done". Once the measurements are in
@@ -82,14 +93,13 @@ feature-focussed push. By examining which class of errors we missed, we can
 guide our code reviews and decide how better to catch them earlier during
 automated testing.
 
-Besides being a great tool to locate which areas of your code to focus on,
-having tangible feedback is incredibly rewarding when completing a task and
-seeing its positive impact on your system in production. Graphs and alerts can
-be placed on a dashboard and displayed in the office to give a real-time view of
-the environment that everyone can see. It was very encouraging to find
-non-technical people take an interest in this data, in an easily digestible
-format, which in turn stimulated other conversations about the inner workings of
-our application.
+Measuring your system is a great way to locate which areas of your code require
+the most attention. Additionally, it is incredibly rewarding seeing improvements
+to your production system shown graphically when completing tasks. Graphs and
+alerts can be placed on a dashboard and displayed in the office to give a
+real-time view of the environment that everyone can see. It was very encouraging
+to find non-technical people take an interest in this data, which in turn
+stimulated other conversations about the inner workings of our application.
 
 After keeping our metrics open on a second monitor for a few weeks, I became so
 accustomed to the baseline values that I was able almost sub-consciously to tell
