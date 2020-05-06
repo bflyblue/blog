@@ -17,11 +17,12 @@ Web applications here at Mpowered.
 
 We picked [Grafana](https://grafana.com) as our graphing tool which has native
 support for PostgreSQL (using the [Timescale](https://www.timescale.com)
-extension) as the database for our metrics. While it works with many other
+extension). While it works with many other
 [time series databases](https://en.wikipedia.org/wiki/Time_series_database),
-using a relational database made it trivial to import data from any platform
-that can connect to a Postgres database. Running ad-hoc SQL queries is useful in
-discovering new patterns in our data that are then trivial to graph in Grafana.
+using a well supported relational database makes it easy to import data from any
+platform that can connect to a Postgres database. Running ad-hoc SQL queries is
+useful in discovering new patterns in our data that are then trivial to graph in
+Grafana.
 
 Our first phase involved measuring the easy stuff, namely system performance and
 resource usage on the servers our applications run on. Seeing CPU, RAM, and disk
